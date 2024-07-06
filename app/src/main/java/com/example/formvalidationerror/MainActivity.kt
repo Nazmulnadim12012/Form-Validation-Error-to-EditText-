@@ -2,12 +2,16 @@ package com.example.formvalidationerror
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textview.MaterialTextView
 import kotlin.system.exitProcess
 
 lateinit var firstNameEditText: EditText
@@ -16,6 +20,8 @@ lateinit var loginEmailEditText: EditText
 lateinit var passwordEditText: EditText
 lateinit var cancelButton: Button
 lateinit var submitButton: Button
+lateinit var textInputLayout: TextInputLayout
+
 
 var isAllfieldschecked = false
 
@@ -36,6 +42,11 @@ class MainActivity : AppCompatActivity() {
         passwordEditText = findViewById(R.id.login_password)
         cancelButton = findViewById(R.id.cancel_button)
         submitButton = findViewById(R.id.submit_button)
+        textInputLayout = findViewById(R.id.textInputLayout)
+
+       val materialEditText = textInputLayout.editText
+
+
 
 
         submitButton.setOnClickListener {
@@ -54,7 +65,30 @@ class MainActivity : AppCompatActivity() {
             exitProcess(0)
         }
 
+        materialEditText?.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+                val maxLength = 20
+                if (s!=null && s.length > 20){
+                    materialEditText.setText(s.substring(0,maxLength)) // Truncate the text to max length
+                    materialEditText.setSelection(maxLength) // Move the cursor to the end of the truncated text
+                }
+
+            }
+        })
+
     }
+
 
     private fun allFieldsChecked(): Boolean {
 
